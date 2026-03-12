@@ -1,61 +1,34 @@
-
-name: deploy-miniApp-to-gcp
+name: Deploy MiniApp to GCP
 
 on:
   push:
-    branches: [miniApp]
-  workflow_dispatch:
+    branches: [dev]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
-      - name: Prepare SSH
-        shell: bash
-        env:
-          SSH_HOST: 34.16.219.95
+      - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          chmod 700 ~/.ssh
-          # Add private key from GitHub secrets
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          # Add VM to known hosts
-          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
+          ssh-keyscan -H 34.16.219.95 >> ~/.ssh/known_hosts
 
-      - name: Deploy over SSH
-        shell: bash
-        env:
-          SSH_USER: karelkis23
-          SSH_HOST: 34.16.219.95
-          APP_DIR: app
-          PM2_NAME: app
+      - name: Deploy to GCP VM
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "$SSH_USER@$SSH_HOST" bash << EOF
-            set -euo pipefail
+          ssh -o StrictHostKeyChecking=no karelkis23@34.16.219.95 << 'EOF'
+            cd ~/prepare-mi-term
 
-            cd "$APP_DIR"
+            git pull origin main
 
-            # Ensure we are on the correct branch
-            git fetch origin
-            git checkout miniApp
-            git reset --hard origin/miniApp
+            npm install
 
-            # Install dependencies cleanly
-            npm ci
+            pm2 restart app || pm2 start app.mjs --name app
 
-            # Restart PM2 process safely
-            if pm2 list | grep -q "$PM2_NAME"; then
-              pm2 delete "$PM2_NAME"
-            fi
-            pm2 start -f app.mjs --name "$PM2_NAME"
             pm2 save
           EOF
-
