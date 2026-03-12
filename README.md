@@ -87,4 +87,4 @@ my repos link (https://github.com/kkisaku22/)
 pull (https://github.com/kkisaku22/prepare-mi-term/pull/8)
 Successful CI/CD Action(https://github.com/kkisaku22/prepare-mi-term/blob/dev/deploy-main-to-gcp.yml)
 this milstone (https://github.com/kkisaku22/prepare-mi-term/issues/7#issuecomment-4049544327)
-ssh -i miterm karel@34.16.219.95
+ssh -i miterm1 karel@34.16.219.95
