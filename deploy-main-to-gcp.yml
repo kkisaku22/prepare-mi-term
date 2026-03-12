@@ -3,7 +3,7 @@ name: deploy-miniApp-to-gcp
 
 on:
   push:
-    branches: [miniApp]
+    branches: [dev]
   workflow_dispatch:
 
 jobs:
@@ -35,8 +35,8 @@ jobs:
         env:
           SSH_USER: karelkis23
           SSH_HOST: 34.16.219.95
-          APP_DIR: app
-          PM2_NAME: app
+          APP_DIR: 
+          PM2_NAME: 
         run: |
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa "$SSH_USER@$SSH_HOST" bash << EOF
             set -euo pipefail
