@@ -80,4 +80,4 @@
 	- the `issue`, `pull request`, `milestone` & successful `action`
 
 ## Submission
-- a link to your repository. 
+pull (https://github.com/kkisaku22/prepare-mi-term/pull/6/)
