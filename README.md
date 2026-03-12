@@ -80,4 +80,10 @@
 	- the `issue`, `pull request`, `milestone` & successful `action`
 
 ## Submission
+my external ip (http://34.16.219.95/)
+gitHub pages (https://github.com/kkisaku22/prepare-mi-term/)
+my render app(https://prepare-mi-term.onrender.com/)
+my repos link (https://github.com/kkisaku22/)
 pull (https://github.com/kkisaku22/prepare-mi-term/pull/6/)
+Successful CI/CD Action(https://github.com/kkisaku22/prepare-mi-term/blob/dev/deploy-main-to-gcp.yml)
+this milstone (https://github.com/kkisaku22/prepare-mi-term/issues/7#issuecomment-4049544327)
