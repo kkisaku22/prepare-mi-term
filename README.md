@@ -14,7 +14,8 @@
 | **Pull Request** | https://github.com/kkisaku22/prepare-mi-term/pull/8| 
 | **Milestone** | https://github.com/kkisaku22/prepare-mi-term/milestone/1 | 
 | **Successful CI/CD Action** | https://github.com/kkisaku22/prepare-mi-term/tree/main/.github/workflows| 
-| **ssh cmd to your gcp** | ssh -i miterm_new karel@34.16.162.248` | 
+| **ssh cmd to your gcp** |ssh -i ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINBkUFKHjQGLI6CiCYc+7ceGvJOK8oMd2Hoo05CpZtBI bcumbie@CSM2-0244-MFXXH.main.local.una.edu bcumbie@34.16.162.248
+ssh -i miterm_new karel@34.16.162.248`   | 
 
 ---
 
