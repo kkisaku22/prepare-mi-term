@@ -29,9 +29,12 @@ jobs:
             echo "🔄 Pulling latest changes..."
             cd ~/prepare-mi-term
 
+            # Clean local changes and reset branch
             git reset --hard
             git clean -fd
-            git pull origin $GITHUB_REF_NAME || git pull origin main
+
+            # Pull the latest code
+            git pull origin main
 
             echo "📦 Installing dependencies..."
             npm install
