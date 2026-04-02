@@ -2,19 +2,16 @@ import express from 'express';
 import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import 'dotenv/config'; // for production env variables
 
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
 
-// Use your own MongoDB URI, stored in .env for production
-const uri = "mongodb+srv://garfield:lasagna@cluster0.taug6.mongodb.net/?appName=Cluster0";
+// MongoDB URI from environment or fallback (do NOT commit secrets!)
+const uri = process.env.MONGO_URI || "mongodb+srv://garfield:lasagna@cluster0.taug6.mongodb.net/?appName=Cluster0";
 const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  }
+  serverApi: { version: ServerApiVersion.v1, strict: true, deprecationErrors: true }
 });
 
 // Middleware
@@ -22,7 +19,7 @@ app.use(express.static(join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Connect to MongoDB once at startup
+// Connect to MongoDB
 async function connectDB() {
   try {
     await client.connect();
@@ -38,7 +35,7 @@ app.get('/', (req, res) => {
   res.sendFile(join(__dirname, 'public', 'exam.html'));
 });
 
-
+// Emoji lookup
 app.post('/api/get-name', async (req, res) => {
   try {
     const { userName } = req.body;
@@ -57,7 +54,7 @@ app.post('/api/get-name', async (req, res) => {
   }
 });
 
-
+// Initialize emoji
 const yourNameAndEmoji = { name: 'barry', emoji: '🐸' }; // replace with your own
 app.get('/api/init-emoji', async (req, res) => {
   try {
@@ -75,11 +72,9 @@ app.get('/api/init-emoji', async (req, res) => {
   }
 });
 
-
-
+// Items CRUD
 const itemsCollection = client.db('cis486').collection('items');
 
-// GET all items
 app.get('/api/items', async (req, res) => {
   try {
     const items = await itemsCollection.find({}).toArray();
@@ -89,7 +84,6 @@ app.get('/api/items', async (req, res) => {
   }
 });
 
-// POST a new item
 app.post('/api/items', async (req, res) => {
   try {
     const newItem = req.body;
@@ -111,7 +105,6 @@ app.put('/api/items/:id', async (req, res) => {
   }
 });
 
-// DELETE an item
 app.delete('/api/items/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -121,7 +114,6 @@ app.delete('/api/items/:id', async (req, res) => {
     res.status(500).json({ error: 'Failed to delete item' });
   }
 });
-
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
