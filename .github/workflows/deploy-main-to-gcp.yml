@@ -1,6 +1,6 @@
 name: Deploy MiniApp to GCP
 
-# Trigger the workflow when pushing to main or dev
+# Trigger workflow when pushing to main or dev
 on:
   push:
     branches: [main, dev]
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout the repository
+      # 1️⃣ Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -29,11 +29,9 @@ jobs:
             echo "🔄 Pulling latest changes..."
             cd ~/prepare-mi-term
 
-            # Clean local changes and reset branch
+            # Clean local changes to avoid conflicts
             git reset --hard
             git clean -fd
-
-            # Pull the latest code
             git pull origin main
 
             echo "📦 Installing dependencies..."
