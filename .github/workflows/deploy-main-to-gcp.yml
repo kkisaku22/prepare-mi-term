@@ -1,4 +1,4 @@
-name: Deploy MiniApp to GCP d
+name: Deploy MiniApp to GCP 
 
 # Trigger workflow when pushing to main or dev
 on:
