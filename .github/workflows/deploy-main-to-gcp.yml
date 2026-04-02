@@ -1,34 +1,46 @@
 name: Deploy MiniApp to GCP
 
+# Trigger the workflow when pushing to main or dev
 on:
   push:
-    branches: [dev]
+    branches: [main, dev]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
+      # 1️⃣ Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # 2️⃣ Set up SSH keys
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H 34.16.219.95 >> ~/.ssh/known_hosts
+          ssh-keyscan -H ${{ secrets.VM_IP }} >> ~/.ssh/known_hosts
 
+      # 3️⃣ Deploy to GCP VM
       - name: Deploy to GCP VM
         run: |
-          ssh -o StrictHostKeyChecking=no karelkis23@34.16.219.95 << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.VM_IP }} << 'EOF'
+            echo "🔄 Pulling latest changes..."
             cd ~/prepare-mi-term
 
-            git pull origin main
+            git reset --hard
+            git clean -fd
+            git pull origin $GITHUB_REF_NAME || git pull origin main
 
+            echo "📦 Installing dependencies..."
             npm install
 
+            echo "⚡ Restarting Node.js app with PM2..."
             pm2 restart app || pm2 start app.mjs --name app
 
+            echo "💾 Saving PM2 process list..."
             pm2 save
+
+            echo "✅ Deployment complete!"
           EOF
