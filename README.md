@@ -14,7 +14,7 @@
 | **Pull Request** | https://github.com/kkisaku22/prepare-mi-term/pull/8| 
 | **Milestone** | https://github.com/kkisaku22/prepare-mi-term/milestone/1 | 
 | **Successful CI/CD Action** | https://github.com/kkisaku22/prepare-mi-term/tree/main/.github/workflows| 
-| **ssh cmd to your gcp** | `ssh -i student-key bcumbie@your.static.external.ip` | 
+| **ssh cmd to your gcp** | ssh -i miterm_new karel@34.16.162.248` | 
 
 ---
 
