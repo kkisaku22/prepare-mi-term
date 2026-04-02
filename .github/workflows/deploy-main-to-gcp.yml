@@ -14,7 +14,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Set up SSH keys
+      # 2️⃣ Setup Node (optional but good practice)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      # 3️⃣ Setup SSH
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
@@ -22,26 +28,44 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.VM_IP }} >> ~/.ssh/known_hosts
 
-      # 3️⃣ Deploy to GCP VM
+      # 4️⃣ Deploy to GCP VM
       - name: Deploy to GCP VM
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.VM_IP }} << 'EOF'
-            echo "🔄 Pulling latest changes..."
-            cd ~/prepare-mi-term
 
-            # Clean local changes to avoid conflicts
-            git reset --hard
+            echo "🔄 Pulling latest changes..."
+            cd ~/prepare-mi-term || exit
+
+            # Make sure repo exists
+            if [ ! -d ".git" ]; then
+              echo "📥 Cloning repo..."
+              git clone https://github.com/${{ github.repository }} .
+            fi
+
+            # Reset and pull correct branch
+            git fetch origin
+            git reset --hard origin/main
             git clean -fd
-            git pull origin main
 
             echo "📦 Installing dependencies..."
             npm install
 
+            echo "⚙️ Installing PM2 if not installed..."
+            if ! command -v pm2 &> /dev/null
+            then
+              npm install -g pm2
+            fi
+
             echo "⚡ Restarting Node.js app with PM2..."
-            pm2 restart app || pm2 start app.mjs --name app
+            pm2 delete app || true
+            pm2 start app.mjs --name app
 
             echo "💾 Saving PM2 process list..."
             pm2 save
 
+            echo "🚀 Setting PM2 to start on reboot..."
+            pm2 startup systemd -u $USER --hp $HOME
+
             echo "✅ Deployment complete!"
+
           EOF
