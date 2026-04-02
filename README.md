@@ -10,7 +10,7 @@
 | **GitHub Pages (docs/)** | https://kkisaku22.github.io/prepare-mi-term/ | 
 | **Dev Server (Render)** | (https://prepare-mi-term.onrender.com/ | 
 | **Production Server (GCP)** | http://34.16.162.248/ | 
-| **Issue** | [https://github.com/your-username/your-repo-name/issues/1](https://github.com/your-username/your-repo-name/issues/1) | 
+| **Issue** | https://github.com/kkisaku22/prepare-mi-term/issues/7 | 
 | **Pull Request** | [https://github.com/your-username/your-repo-name/pull/1](https://github.com/your-username/your-repo-name/pull/1) | 
 | **Milestone** | [https://github.com/your-username/your-repo-name/milestone/1](https://github.com/your-username/your-repo-name/milestone/1) | 
 | **Successful CI/CD Action** | [https://github.com/your-username/your-repo-name/actions/runs/your-run-id](https://github.com/your-username/your-repo-name/actions/runs/your-run-id) | 
